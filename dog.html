@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', Arial, sans-serif;
+        }
+
+        body {
+            color: #333;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px 5%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #fd9400;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logo small {
+            display: block;
+            font-size: 13px;
+            color: rgb(255, 234, 0);
+            letter-spacing: 2px;
+            text-transform: none;
+            margin-top: 3px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .menu-icon {
+            font-size: 22px;
+            cursor: pointer;
+            color: rgb(255, 255, 255);
+            display: none;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            font-size: 16px;
+            color: rgb(255, 255, 255);
+            position: relative;
+            padding: 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #fd9400;
+            transition: width 0.3s ease;
+        }
+
+        .nav-item:hover:after {
+            width: 100%;
+        }
+
+        .shop {
+            font-weight: bold;
+            color: #81eb44;
+        }
+
+        .login-btn {
+            background: linear-gradient(to right, #e60000, #ff3333);
+            color: rgb(255, 255, 255);
+            padding: 8px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(255, 0, 0, 0.3);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(255, 0, 0, 0.5);
+        }
+
+        /* Search Box Styles */
+        .search-container {
+            display: flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            height: 45px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .search-container:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .search-box {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            font-size: 16px;
+            outline: none;
+            background-color: transparent;
+            color: white;
+        }
+
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .search-button {
+            background: linear-gradient(to right, #0062cc, #007bff);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 0 30px 30px 0;
+            transition: all 0.3s ease;
+        }
+
+        .search-button:hover {
+            background: linear-gradient(to right, #0056b3, #0069d9);
+        }
+
+        /* Product Details Styles */
+        .product-container {
+            padding-top: 120px;
+            background: linear-gradient(135deg, #017979, #004242);
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        .product-details {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 30px 5%;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+        }
+
+        .product-details:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .product-image {
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.4s ease;
+        }
+
+        .product-details:hover .product-image {
+            border-color: #fd9400;
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            flex: 1;
+            color: white;
+        }
+
+        .product-info h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #fd9400;
+        }
+
+        .product-info p {
+            font-size: 16px;
+            margin-bottom: 10px;
+            line-height: 1.8;
+        }
+
+        .add-to-cart {
+            display: inline-block;
+            background: transparent;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 30px;
+            border: 2px solid white;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .add-to-cart:hover {
+            background: #fd9400;
+            color: white;
+            border-color: #fd9400;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer Styles */
+        .footer {
+            background-color: #121212;
+            padding: 60px 5%;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            position: relative;
+            color: #888;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #017979, #fd9400);
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 30px;
+            padding-right: 30px;
+        }
+
+        .footer-section h3 {
+            color: #fd9400;
+            margin-bottom: 20px;
+            font-size: 18px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: #fd9400;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section li {
+            margin-bottom: 12px;
+        }
+
+        .footer-section a {
+            text-decoration: none;
+            color: #888;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .footer-section a:hover {
+            color: #fd9400;
+            transform: translateX(5px);
+        }
+
+        .footer-app-icons {
+            margin-top: 15px;
+            margin-bottom: 25px;
+        }
+
+        .footer-app-icons img {
+            height: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .footer-app-icons img:hover {
+            transform: scale(1.1);
+        }
+
+        .footer-social-icons {
+            margin-top: 15px;
+            margin-bottom: 25px;
+            display: flex;
+        }
+
+        .footer-social-icons a {
+            margin-right: 15px;
+            font-size: 20px;
+            color: #888;
+            transition: all 0.3s ease;
+        }
+
+        .footer-social-icons a:hover {
+            color: #fd9400;
+            transform: translateY(-5px);
+        }
+
+        .footer-contact-info {
+            margin-top: 30px;
+        }
+
+        .footer-contact-info p {
+            margin-bottom: 12px;
+        }
+
+        .footer-contact-info a {
+            color: #fd9400;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .search-container {
+                width: 280px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .navbar {
+                padding: 15px 3%;
+            }
+            
+            .search-container {
+                width: 220px;
+            }
+            
+            .nav-links {
+                gap: 15px;
+            }
+            
+            .product-details {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .product-image {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-wrap: wrap;
+                padding: 10px 20px;
+            }
+            
+            .search-container {
+                order: 3;
+                width: 100%;
+                margin-top: 15px;
+            }
+            
+            .menu-icon {
+                display: block;
+            }
+            
+            .nav-links {
+                gap: 20px;
+            }
+            
+            .footer-section {
+                min-width: 45%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .logo {
+                font-size: 22px;
+            }
+            
+            .logo small {
+                font-size: 11px;
+            }
+            
+            .nav-item {
+                display: none;
+            }
+            
+            .login-btn {
+                padding: 6px 15px;
+                font-size: 14px;
+            }
+            
+            .product-image {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .product-info h2 {
+                font-size: 24px;
+            }
+            
+            .footer-section {
+                min-width: 100%;
+            }
+        }
+    </style>
+    <script>
+        function addToCart(productName, productPrice, productImage) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.push({
+                name: productName,
+                price: productPrice,
+                image: productImage
+            });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert('Added to cart!');
+        }
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <span>My Choice</span>
+            <small>Pet | friend | Partner</small>
+        </div>
+        <div class="search-container">
+            <input type="text" class="search-box" placeholder="Search">
+            <button class="search-button">🔍</button>
+        </div>
+        <div class="nav-links">
+            <span class="menu-icon">☰</span>
+            <a href="file:///C:/Users/asswa/Downloads/capstone_webpage/capstone.html" class="nav-item">Home </a>
+            <a href="cart.html" class="nav-item shop"><span>🛒</span> cart</a>
+            <a href="capstone_login.html" class="login-btn">Login</a>
+        </div>
+    </nav>
+
+    <div class="product-container">
+        <div class="product-details">
+            <img src="dog1.jpg" alt="German Shepherd" class="product-image">
+            <div class="product-info">
+                <h2>German Shepherd</h2>
+                <p>A loyal and intelligent breed known for their versatility and courage. German Shepherds make excellent companions, working dogs, and family pets. They are highly trainable and form strong bonds with their owners.</p>
+                <p>Price: ₹649</p>
+                <button class="add-to-cart" onclick="addToCart('German Shepherd', 649, 'dog1.jpg')">Add to Cart</button>
+            </div>
+        </div>
+        
+        <div class="product-details">
+            <img src="dog2.jpg" alt="Golden Retriever" class="product-image">
+            <div class="product-info">
+                <h2>Golden Retriever</h2>
+                <p>A friendly and intelligent breed that excels as a family companion. Golden Retrievers are known for their gentle temperament, beautiful coat, and eagerness to please their owners.</p>
+                <p>Price: ₹999</p>
+                <button class="add-to-cart" onclick="addToCart('Golden Retriever', 999, 'dog2.jpg')">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="product-details">
+            <img src="dog3.jpg" alt="American Eskimo Dog" class="product-image">
+            <div class="product-info">
+                <h2>American Eskimo Dog</h2>
+                <p>A bright, energetic breed with a beautiful white coat. American Eskimo Dogs are known for their intelligence, loyalty, and playful nature, making them excellent family companions.</p>
+                <p>Price: ₹999</p>
+                <button class="add-to-cart" onclick="addToCart('American Eskimo Dog', 999, 'dog3.jpg')">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="product-details">
+            <img src="dog4.jpg" alt="Alaskan Malamute" class="product-image">
+            <div class="product-info">
+                <h2>Alaskan Malamute</h2>
+                <p>A powerful and majestic breed with a thick coat designed for cold weather. Alaskan Malamutes are known for their strength, endurance, and friendly disposition.</p>
+                <p>Price: ₹999</p>
+                <button class="add-to-cart" onclick="addToCart('Alaskan Malamute', 999, 'dog4.jpg')">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-section">
+            <h3>ONLINE SHOPPING</h3>
+            <ul>
+                <li><a href="#">Dogs</a></li>
+                <li><a href="#">Cats</a></li>
+                <li><a href="#">Small Pets</a></li>
+                <li><a href="#">Consult a Vet</a></li>
+                <li><a href="#">Dog Behaviour</a></li>
+                <li><a href="#">Pet Pharmacy</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-section">
+            <h3>EXPLORE</h3>
+            <ul>
+                <li><a href="#">Our story</a></li>
+                <li><a href="#">FAQs</a></li>
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Supertails Companion</a></li>
+                <li><a href="#">Supertails Vet</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-section">
+            <h3>QUICK LINKS</h3>
+            <ul>
+                <li><a href="#">My Account</a></li>
+                <li><a href="#">Track Your Order</a></li>
+                <li><a href="#">Refund policy</a></li>
+                <li><a href="#">Return policy</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Use</a></li>
+                <li><a href="#">Refer and save</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-section">
+            <h3>EXPERIENCE SUPERTALES APP ON MOBILE</h3>
+            <div class="footer-app-icons">
+                <a href="#"><img src="playstore.png" alt="Google Play"></a>
+            </div>
+        
+            <h3>FOLLOW US</h3>
+            <div class="footer-social-icons">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        
+            <div class="footer-contact-info">
+                <h3>GET IN TOUCH</h3>
+                <p>1800-5723-575</p>
+                <p><a href="mailto:support@supertails.com">support@supertails.com</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+</body>
+</html>
